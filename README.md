@@ -5,6 +5,9 @@ EventSource is a simple library for PHP 5.4 and later to create event source obj
 
 Usage
 ---------
+
+### EventSource trait
+
 When you wish to make one of your classes an event source, simply use the EventSource trait in them and call the
 initializer method.
 
@@ -29,6 +32,17 @@ You can use the `on($eventName, $callback)` method to define event handlers whic
     });
 
 You can also remove event handlers using the `remove($eventName, $callback)` method.
+
+### Event class
+
+Alternatively, you have the option to manually create Event objects that are used by EventSource to manage the event handlers.
+The Event class has the following methods:
+
+ * `on($callback)` - register a new callback to handle the event
+ * `remove($callback)` - removes a previously registered callback
+ * `raise(optional $parameter)` - raises the event
+
+One downside is when using the Event class directly is that `raise()` is a public method.
 
 Installation
 ---------

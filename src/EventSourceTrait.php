@@ -4,18 +4,21 @@ namespace EventSource;
 
 trait EventSourceTrait
 {
-    private $handlers = [];
+    /**
+     * @var Event[]
+     */
+    private $events = [];
 
     /**
      * @param string[] $eventNames
      */
     protected function initialize(array $eventNames)
     {
-        if (!empty($this->handlers)) {
+        if (!empty($this->events)) {
             throw new \BadMethodCallException('Event source is already initialized');
         }
         foreach ($eventNames as $eventName) {
-            $this->handlers[ $eventName ] = [];
+            $this->events[ $eventName ] = new Event();
         }
     }
 
@@ -28,7 +31,7 @@ trait EventSourceTrait
     public function on($eventName, callable $handler)
     {
         $this->guardEvent($eventName);
-        $this->handlers[ $eventName ][] = $handler;
+        $this->events[ $eventName ]->on($handler);
     }
 
     /**
@@ -39,11 +42,8 @@ trait EventSourceTrait
      */
     public function remove($eventName, callable $handler)
     {
-        if (isset($this->handlers[ $eventName ])) {
-            $index = array_search($handler, $this->handlers[ $eventName ]);
-            if ($index !== false) {
-                unset($this->handlers[ $eventName ][ $index ]);
-            }
+        if (isset($this->events[ $eventName ])) {
+            $this->events[ $eventName ]->remove($handler);
         }
     }
 
@@ -51,14 +51,12 @@ trait EventSourceTrait
      * Raise an event with an additional optional parameter
      *
      * @param          $eventName
-     * @param mixed    $parameter
+     * @param mixed $parameter
      */
     protected function raise($eventName, $parameter = null)
     {
         $this->guardEvent($eventName);
-        foreach ($this->handlers[ $eventName ] as $handler) {
-            call_user_func($handler, $parameter);
-        }
+        $this->events[ $eventName ]->raise($parameter);
     }
 
     /**
@@ -66,7 +64,7 @@ trait EventSourceTrait
      */
     private function guardEvent($eventName)
     {
-        if (!isset($this->handlers[ $eventName ])) {
+        if (!isset($this->events[ $eventName ])) {
             throw new \InvalidArgumentException("Event '{$eventName}' is not defined");
         }
     }
