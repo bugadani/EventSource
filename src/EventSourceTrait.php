@@ -57,7 +57,7 @@ trait EventSourceTrait
     {
         $this->guardEvent($eventName);
         foreach ($this->handlers[ $eventName ] as $handler) {
-            $handler($parameter);
+            call_user_func($handler, $parameter);
         }
     }
 
