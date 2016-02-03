@@ -2,6 +2,11 @@
 
 namespace EventSource;
 
+/**
+ * Encapsulates an event. Handlers can be added and/or removed using the {@code Event::on} and {@code Event::remove} methods.
+ *
+ * @package EventSource
+ */
 class Event
 {
     /**
@@ -26,7 +31,7 @@ class Event
      */
     public function remove(callable $handler)
     {
-        $index = array_search($handler, $this->handlers);
+        $index = array_search($handler, $this->handlers, true);
         if ($index !== false) {
             unset($this->handlers[ $index ]);
         }
@@ -40,7 +45,7 @@ class Event
     public function raise($parameter = null)
     {
         foreach ($this->handlers as $handler) {
-            call_user_func($handler, $parameter);
+            $handler($parameter);
         }
     }
 }

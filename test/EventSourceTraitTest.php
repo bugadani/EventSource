@@ -3,12 +3,11 @@
 namespace EventSource\Test;
 
 use EventSource\Test\Mocks\TestClass;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 class EventSourceTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testUninitializedThrowsException()
     {

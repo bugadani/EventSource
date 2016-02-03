@@ -1,7 +1,7 @@
 EventSource
 =========
 
-EventSource is a simple library for PHP 5.4 and later to create event source objects.
+EventSource is a simple library for PHP 5.4+ to create event source objects.
 
 Usage
 ---------
@@ -42,7 +42,8 @@ The Event class has the following methods:
  * `remove($callback)` - removes a previously registered callback
  * `raise(optional $parameter)` - raises the event
 
-One downside is when using the Event class directly is that `raise()` is a public method.
+One downside is when using the Event class directly is that `raise()` is a public method, so any outside code may
+trigger events.
 
 Installation
 ---------

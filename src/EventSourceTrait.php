@@ -2,21 +2,29 @@
 
 namespace EventSource;
 
+/**
+ * EventSourceTrait adds event source functionality to an object. To define events, one must call the {@code initialize}
+ * method with an array of event names. Event handlers can be added and removed via the {@code EventSourceTrait::on}
+ * and {@code EventSourceTrait::remove} methods.
+ *
+ * @package EventSource
+ */
 trait EventSourceTrait
 {
     /**
      * @var Event[]
      */
-    private $events = [];
+    private $events;
 
     /**
      * @param string[] $eventNames
      */
     protected function initialize(array $eventNames)
     {
-        if (!empty($this->events)) {
+        if ($this->events !== null) {
             throw new \BadMethodCallException('Event source is already initialized');
         }
+        $this->events = [];
         foreach ($eventNames as $eventName) {
             $this->events[ $eventName ] = new Event();
         }
@@ -51,7 +59,7 @@ trait EventSourceTrait
      * Raise an event with an additional optional parameter
      *
      * @param          $eventName
-     * @param mixed $parameter
+     * @param mixed    $parameter
      */
     protected function raise($eventName, $parameter = null)
     {
