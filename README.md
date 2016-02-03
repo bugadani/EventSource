@@ -51,5 +51,5 @@ Installation
 ### Using Composer
 
     "require": {
-        "bugadani/event_source": "dev-master"
+        "bugadani/event_source": "1.*"
     }
